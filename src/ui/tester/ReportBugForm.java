@@ -4,9 +4,16 @@ package ui.tester;
  * @author Ammar
  */
 
+// import for Files
 import enums.BugSeverityEnum;
 import dao.BugDAO;
 import dao.UserDAO; 
+import java.io.File;
+
+// import for GUI
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ReportBugForm extends javax.swing.JDialog {
 
@@ -36,6 +43,8 @@ public class ReportBugForm extends javax.swing.JDialog {
         severityLabel = new javax.swing.JLabel();
         developerLabel = new javax.swing.JLabel();
         devList = new javax.swing.JComboBox<>();
+        PoCLabel = new javax.swing.JLabel();
+        addPoCBtn = new javax.swing.JButton();
 
         setTitle("Report New Bug");
 
@@ -43,66 +52,54 @@ public class ReportBugForm extends javax.swing.JDialog {
 
         bugDiscriptionLabel.setText("Description");
 
-        bugTitleText.addActionListener(this::bugTitleTextActionPerformed);
-
         assignBugBtn.setText("Assign Bug");
         assignBugBtn.addActionListener(this::assignBugBtnActionPerformed);
 
         severityList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Critical", "High", "Medium", "low", "info" }));
-        severityList.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                severityListPopupMenuWillBecomeVisible(evt);
-            }
-        });
 
         severityLabel.setText("Severity");
 
         developerLabel.setText("Developer");
 
         devList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dev1", "Dev2", "Dev3", "Dev4" }));
-        devList.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                devListPopupMenuWillBecomeVisible(evt);
-            }
-        });
-        devList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                devListMouseClicked(evt);
-            }
-        });
+
+        PoCLabel.setText("PoC");
+
+        addPoCBtn.setText("Add PoC");
+        addPoCBtn.addActionListener(this::addPoCBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(bugTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bugDiscriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(severityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(developerLabel))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bugDescriptionText, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
-                    .addComponent(bugTitleText)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(devList, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(severityList, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(275, Short.MAX_VALUE)
-                .addComponent(assignBugBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(devList, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(258, 258, 258))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bugTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(severityLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bugDiscriptionLabel)
+                                .addComponent(PoCLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bugDescriptionText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bugTitleText)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(severityList, 0, 102, Short.MAX_VALUE)
+                                .addGap(66, 66, 66)
+                                .addComponent(developerLabel)
+                                .addGap(211, 211, 211))
+                            .addComponent(addPoCBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(255, 255, 255)
+                        .addComponent(assignBugBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,41 +115,33 @@ public class ReportBugForm extends javax.swing.JDialog {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(severityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(severityList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                    .addComponent(severityList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(developerLabel)
+                    .addComponent(devList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(devList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(developerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                    .addComponent(PoCLabel)
+                    .addComponent(addPoCBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
                 .addComponent(assignBugBtn)
-                .addGap(30, 30, 30))
+                .addGap(42, 42, 42))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void bugTitleTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bugTitleTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bugTitleTextActionPerformed
-
-    private void severityListPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_severityListPopupMenuWillBecomeVisible
-        
-    }//GEN-LAST:event_severityListPopupMenuWillBecomeVisible
-
-    private void devListPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_devListPopupMenuWillBecomeVisible
-        // TODO add your handling code here:
-    }//GEN-LAST:event_devListPopupMenuWillBecomeVisible
-
-    private void devListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_devListMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_devListMouseClicked
 
     private void assignBugBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignBugBtnActionPerformed
         // Assign Bug to developer -> save info on text files, and clear the form
         // list them depending on priorty
     }//GEN-LAST:event_assignBugBtnActionPerformed
 
+    private void addPoCBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPoCBtnActionPerformed
+        openFileChooser();
+    }//GEN-LAST:event_addPoCBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel PoCLabel;
+    private javax.swing.JButton addPoCBtn;
     private javax.swing.JButton assignBugBtn;
     private java.awt.TextArea bugDescriptionText;
     private javax.swing.JLabel bugDiscriptionLabel;
@@ -167,4 +156,18 @@ public class ReportBugForm extends javax.swing.JDialog {
     // Logic of variables
     BugSeverityEnum severity;
     
+    // methods
+    private void openFileChooser(){
+        JFileChooser fileChooser = new JFileChooser();
+        
+        fileChooser.setDialogTitle("Choose file of the proof of concept");
+        // show file chooser
+        int userSelection = fileChooser.showOpenDialog(this);
+        
+        // check if user choosed a file
+        if(userSelection == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fileChooser.getSelectedFile();
+            
+        }
+    }
 }
