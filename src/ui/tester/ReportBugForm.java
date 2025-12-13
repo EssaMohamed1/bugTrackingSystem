@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package ui.tester;
-
 /**
  * Report Bug Form - Form to create new bug
- * @author Team
+ * @author Ammar
  */
+
+import enums.BugSeverityEnum;
+import dao.BugDAO;
+import dao.UserDAO; 
+
 public class ReportBugForm extends javax.swing.JDialog {
 
     /**
@@ -27,23 +27,144 @@ public class ReportBugForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        bugTitleLabel = new javax.swing.JLabel();
+        bugDiscriptionLabel = new javax.swing.JLabel();
+        bugTitleText = new javax.swing.JTextField();
+        bugDescriptionText = new java.awt.TextArea();
+        assignBugBtn = new javax.swing.JButton();
+        severityList = new javax.swing.JComboBox<>();
+        severityLabel = new javax.swing.JLabel();
+        developerLabel = new javax.swing.JLabel();
+        devList = new javax.swing.JComboBox<>();
+
         setTitle("Report New Bug");
+
+        bugTitleLabel.setText("Title");
+
+        bugDiscriptionLabel.setText("Description");
+
+        bugTitleText.addActionListener(this::bugTitleTextActionPerformed);
+
+        assignBugBtn.setText("Assign Bug");
+        assignBugBtn.addActionListener(this::assignBugBtnActionPerformed);
+
+        severityList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Critical", "High", "Medium", "low", "info" }));
+        severityList.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                severityListPopupMenuWillBecomeVisible(evt);
+            }
+        });
+
+        severityLabel.setText("Severity");
+
+        developerLabel.setText("Developer");
+
+        devList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dev1", "Dev2", "Dev3", "Dev4" }));
+        devList.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                devListPopupMenuWillBecomeVisible(evt);
+            }
+        });
+        devList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                devListMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(bugTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bugDiscriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(severityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(developerLabel))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bugDescriptionText, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                    .addComponent(bugTitleText)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(devList, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(severityList, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(275, Short.MAX_VALUE)
+                .addComponent(assignBugBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(258, 258, 258))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bugTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bugTitleLabel))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bugDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bugDiscriptionLabel))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(severityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(severityList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(devList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(developerLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(assignBugBtn)
+                .addGap(30, 30, 30))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bugTitleTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bugTitleTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bugTitleTextActionPerformed
+
+    private void severityListPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_severityListPopupMenuWillBecomeVisible
+        
+    }//GEN-LAST:event_severityListPopupMenuWillBecomeVisible
+
+    private void devListPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_devListPopupMenuWillBecomeVisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_devListPopupMenuWillBecomeVisible
+
+    private void devListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_devListMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_devListMouseClicked
+
+    private void assignBugBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignBugBtnActionPerformed
+        // Assign Bug to developer -> save info on text files, and clear the form
+        // list them depending on priorty
+    }//GEN-LAST:event_assignBugBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton assignBugBtn;
+    private java.awt.TextArea bugDescriptionText;
+    private javax.swing.JLabel bugDiscriptionLabel;
+    private javax.swing.JLabel bugTitleLabel;
+    private javax.swing.JTextField bugTitleText;
+    private javax.swing.JComboBox<String> devList;
+    private javax.swing.JLabel developerLabel;
+    private javax.swing.JLabel severityLabel;
+    private javax.swing.JComboBox<String> severityList;
     // End of variables declaration//GEN-END:variables
+
+    // Logic of variables
+    BugSeverityEnum severity;
+    
 }
